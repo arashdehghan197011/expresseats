@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./img/RecipeLogo.jpeg" type="image/x-icon">
+    <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <title>Express Eat</title>
+    <style>
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Could be more or less, depending on screen size */
+            text-align: center; /* Centering text */
+        }
+        .close {
+            color: gray;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        img.logo {
+            display: block;
+            margin: 0 auto 20px; /* Centering logo */
+            width: 100px; /* Adjust based on your logo */
+        }
+    </style>
+</head>
+<body>
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <img src="img/RecipeLogo.jpeg" alt="Recipe Logo" class="logo">
+          <h2 style="color: black;">世界の美味しさを、あなたのキッチンから</h2>
+          <p style="color: black;">最高のレシピを毎日お届け。手軽に作れる料理で、毎日の食卓をもっと楽しく！</p>
+        </div>
+      
+      </div>
+    <div class="header">
+        <nav class="nav-bar">
+            <img src="./img/Logo.png" class="brand-name">
+            <a href="#" class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </a>
+            <div class="menu-bar">
+                <ul>
+                    <li><a href="#">ホーム</a></li>
+                    <li><a href="#">私たちについて</a></li>
+                    <li><a href="#">お問い合わせ</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="title">レシピを探す</div>
+        <div style="text-align: center; padding: 10px;" class="intro">
+            <p style="color: white;">アメリカ出身のアラーシュ・シェフは、彼の料理の旅を通じて、独自のレシピを世界と共有しています。彼の料理は、彼の幼少期からの家庭の味が根底にあります。</p>
+            <p style="color: white;">アラーシュは世界中を旅し、各地の料理技術やスパイスを学び、それを彼の創作に取り入れています。彼のレシピは、伝統と革新が融合した独特のものです。</p>
+            <p style="color: white;">このウェブサイトでは、アラーシュ・シェフの手による美味しい冒険にあなたを招待します。彼のレシピブックから選んだ一皿を、ご自宅で再現してみてください。</p>
+            <p style="color: white;">料理を通じて、彼と一緒に文化の架け橋を築き、世界各地の味をお楽しみください。</p>
+            <p style="color: white;">旅と料理の情熱が融合したアラーシュのレシピをぜひご堪能ください。</p>
+        </div>
+        <div class="search-wrapper">
+            <div class="fa fa-search"></div>
+            <input type="text" name="" id="search" placeholder="何を食べたいですか？" onkeyup="search()">
+            <div class="fa fa-times" onclick="clearInput()"></div>
+        </div>
+    </div>
+    
+    
+
+    <div class="result">
+        <h1>検索結果:</h1>
+    </div>
+
+        
+        <div class="card-grid" >
+            <div class="food-list" id="food-list">
+                <p id="none" style="display: none;">申し訳ありませんが、お探しの食品は利用できません。</p>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Sisig.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>シシグ</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="getRecipeDetails()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Adobo.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>アドボ</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get2ndRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Porkchop.webp">
+                    </div>
+                    <div class="card-body">
+                        <h3>シズリング・ポークチョップ</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get3rdRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Omelette.webp">
+                    </div>
+                    <div class="card-body">
+                        <h3>オムレツ</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get4thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Sinigang.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>シニガン</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get5thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Lumpia.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>ルンピア</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get6thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Longanisa.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>ロンガニーザ</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get7thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Burger.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>チキンバーガー</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get8thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Menudo.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>メヌード</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get9thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Tapsilog.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>タプシログ</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get10thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+                <div class="card card-shadow">
+                    <div class="card-header card-image">
+                        <img src="./img/Potato-Breakfast-Skillet.webp">
+                    </div>
+                    <div class="card-body">
+                    <h3>ポテトエッグスキレット</h3>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn" onclick="get11thRecipe()">レシピを見る</button>
+                    </div>
+                </div>
+        </div> 
+
+
+        <div class="meal-detail" id="meal-detail">
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="meal-content">
+                <h2 class="meal-name">シシグ</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">シシグは、フィリピンのルソン島パンパンガ地方の料理で、豚の顔や腹部の部位と鶏レバーを使い、カラマンシー、玉ねぎ、唐辛子で味付けされています。カパンパンガ料理の定番です。</p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>豚の耳 1ポンド
+                        <br>豚バラ肉 1 1/2ポンド
+                        <br>みじん切りの玉ねぎ 1個
+                        <br>醤油 大さじ3
+                        <br>黒こしょう 1/4ティースプーン
+                        <br>みじん切りのしょうが（オプション） 1かけ
+                        <br>唐辛子フレーク 大さじ3
+                        <br>ガーリックパウダー 1/2ティースプーン
+                        <br>レモン 1個、またはカラマンシー 3〜5個
+                        <br>バターまたはマーガリン ½カップ
+                        <br>鶏レバー ¼ポンド
+                        <br>水 6カップ
+                        <br>マヨネーズ 大さじ3
+                        <br>塩 1/2ティースプーン
+                        <br>卵（オプション） 1個
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>水を鍋に入れて沸騰させます。塩とコショウを加えます。
+                        <br>豚の耳と豚バラ肉を入れ、40分から1時間（または柔らかくなるまで）煮ます。
+                        <br>茹でた材料を鍋から取り出し、余分な水を切ります。
+                        <br>豚の耳と豚バラ肉を焼きます。
+                        <br>細かく刻みます。
+                        <br>広いフライパンでバターまたはマーガリンを溶かします。玉ねぎを加え、玉ねぎが柔らかくなるまで炒めます。
+                        <br>しょうがを加え、2分間炒めます。
+                        <br>鶏レバーを加え、パンで調理しながら鶏レバーをつぶします。
+                        <br>刻んだ豚の耳と豚バラ肉を加え、10〜12分間調理します。
+                        <br>醤油、ガーリックパウダー、唐辛子を加えてよく混ぜます。
+                        <br>味を見て塩コショウを調整します。
+                        <br>マヨネーズを加えて他の材料と混ぜ合わせます。
+                        <br>盛り付け皿に移し、刻んだ青ねぎと生卵をトッピングします。
+                        <br>熱々のうちに提供します。楽しんで（食べる前にレモンまたはカラマンシーを加えてください）</p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Sisig.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/mryx6ezu" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="second-meal-detail" id="second-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">アドボ</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">フィリピンのアドボは、フィリピン料理の人気料理で、肉、海鮮、または野菜を酢、醤油、ニンニク、ローリエ、黒コショウでマリネし、油で炒めてマリネ液で煮込む調理法です。</p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>豚バラ肉 2ポンド
+                        <br>にんにく 2大さじ（みじん切りまたはつぶしたもの）
+                        <br>乾燥ローリエ 5枚
+                        <br>酢 4大さじ
+                        <br>醤油 1/2カップ
+                        <br>黒コショウ 1大さじ
+                        <br>水 2カップ
+                        <br>味の塩
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. 豚バラ肉、醤油、にんにくを合わせて、少なくとも1時間マリネします。
+                        <br>2. 鍋を熱してマリネした豚バラ肉を入れ、数分間調理します。
+                        <br>3. 残りのマリネ液とにんにくを加えます。
+                        <br>4. 水、丸ごとの黒コショウ、乾燥ローリエを加え、沸騰させます。40分から1時間煮込みます。
+                        <br>5. 酢を加えて、12分から15分間さらに煮込みます。
+                        <br>6. 味に合わせて塩を加えます。
+                        <br>7. 熱々のまま提供します。共有して楽しんでください！
+                        </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Adobo.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/23pr9c5j" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="third-meal-detail" id="third-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">ジューシーなポークチョップ</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">ジューシーなポークチョップは味が良く、作るのも簡単です。ジューシーな効果がこの料理の楽しさを増しています。ポークチョップ以外に、この料理にはミックスベジタブル、黄色いライス、グレービーソースが必要です。野菜には新鮮な冷凍ミックスベジタブルを使用しました。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>ポークロインチョップ 1枚 (約8オンス)
+                        <br>ビーフブロス 1カップ
+                        <br>塩 1/4ティースプーン
+                        <br>黒こしょう 1/4ティースプーン
+                        <br>ガーリックパウダー 1/4ティースプーン
+                        <br>調理済みミックスベジタブル 3/4カップ
+                        <br>全粒粉 3大さじ
+                        <br>バター 4大さじ
+                        <br>黄色いライス 1カップ
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. ポークロインチョップに塩、黒こしょう、ガーリックパウダーをすり込み、少なくとも30分間放置します。
+                        <br>2. グレービーを作るために、小鍋で1大さじのバターを溶かします。バターが溶けたら、徐々に全粒粉を加えて泡立て器で混ぜ、色が薄茶色になるまで炒めます。ビーフブロスを注ぎ、かき混ぜます。味に合わせて塩とコショウを加え、テクスチャが濃くなるまで続けて調理します。一旦横に置きます。
+                        <br>3. フライパンを熱してバター2大さじを溶かします。
+                        <br>4. 中火でポークロインチョップを両面が薄茶色になるまで焼きます（各面約7〜8分）。横に置きます。
+                        <br>5. シズリングプレートまたはファヒータプレートを熱し、バター1大さじを入れます。
+                        <br>6. バターをプレート全体に広げ、ライス、ミックスベジタブル、ポークロインチョップを配置します。
+                        <br>7. ポークロインチョップの上にグレービーをかけて火を止めます。
+                        <br>8. 提供します。共有して楽しんでください！
+                        </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Porkchop.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/yckbt76x" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="four-meal-detail" id="four-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">オムレツ</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">料理において、オムレツは卵を叩いて作られ、フライパンでバターや油で焼かれる料理です。オムレツには、ニラ、野菜、キノコ、肉、チーズ、玉ねぎなどの具材を折りたたんで包むことが一般的です。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>卵 3個、叩いた
+                        <br>ひまわり油 小さじ1
+                        <br>バター 小さじ1
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. 卵を叩く：オムレツには卵を2〜3個使用します。卵をフォークで軽く叩きます。
+                        <br>2. バターを溶かす：2個の卵用には直径8インチのノンスティックフライパンを使用し、3個の卵用には9インチのフライパンを使用します。バターを中火以下で溶かし、卵を焼くときは温度を低くしてゆっくりと加熱し、底が焦げすぎたり、焼きすぎないようにします。
+                        <br>3. 卵を加える：卵を1分間そのままにした後、耐熱性のシリコンスパチュラを使用して、フライパンの端にある調理済みの卵を優しく持ち上げます。フライパンを傾けて、未調理の卵がフライパンの端に流れるようにします。
+                        <br>4. オムレツに具を入れる：卵が固まり始めたら具を入れますが、オムレツを詰めすぎないようにします。あと数秒間調理します。
+                        <br>5. 折って提供：オムレツを半分に折ります。シリコンスパチュラの助けを借りて皿に滑らせます。
+                    </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Omelette.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/bde4yd4u" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="five-meal-detail" id="five-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">シニガン</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">シニガンは、酸っぱくて旨味のある味が特徴のフィリピンのスープまたはシチューです。主にタマリンドと関連付けられていますが、酸味を出すために他の酸っぱい果物や葉も使用されます。フィリピン料理でより人気のある料理の一つです。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>豚バラ肉または骨付き肉 2ポンド
+                        <br>ほうれん草または空心菜 1束
+                        <br>魚醤 3大さじ
+                        <br>インゲン 12本、2インチの長さに切る
+                        <br>トマト 2個、四等分
+                        <br>唐辛子またはバナナペッパー 3本
+                        <br>料理用油 1大さじ
+                        <br>水 2クォート
+                        <br>玉ねぎ 1個、スライス
+                        <br>タロイモ 2個、四等分
+                        <br>シニガンミックス 1パック（2リットルの水用）
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. 鍋に油を熱し、玉ねぎを炒めて層が分かれるまで炒める
+                        <br>2. 豚バラ肉を加え、外側が薄茶色になるまで炒める
+                        <br>3. 魚醤を加えて材料を混ぜる
+                        <br>4. 水を注ぎ、沸騰させる
+                        <br>5. タロイモとトマトを加え、豚肉が柔らかくなるまで40分間またはそれ以上煮る
+                        <br>6. シニガンミックスと唐辛子を入れる
+                        <br>7. インゲン（および他の野菜があればそれも）を加え、5〜8分間煮る
+                        <br>8. ほうれん草を入れ、火を止めて鍋に蓋をする。残りの熱でほうれん草を調理させる。
+                        <br>9. 熱々のまま提供する。共有して楽しんでください！
+                    </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Sinigang.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/ywbcrx4f" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+        <div class="six-meal-detail" id="six-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">ルンピア</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">フィリピンとインドネシアで人気のある春巻き「ルンピア」。薄いパストリー皮、通称「ルンピアラッパー」で甘いまたは塩味の具を包みます。生または揚げた形で提供されることが多く、前菜やスナックとして楽しまれます。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>ルンピアラッパー 50枚（必要な枚数に応じて）
+                        <br>料理用油 3カップ
+                        <br>挽き肉 1 1/2ポンド
+                        <br>玉ねぎ 2個、みじん切り
+                        <br>ニンジン 2個、みじん切り
+                        <br>ガーリックパウダー 1 1/2小さじ
+                        <br>黒こしょう 1/2小さじ
+                        <br>パセリ 1/2カップ、刻む
+                        <br>塩 1 1/2小さじ
+                        <br>ごま油 1大さじ
+                        <br>卵 2個
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. 全ての具材をボウルに入れ、よく混ぜ合わせる。
+                        <br>2. 具材を大さじ1から1 1/2杯取り、ルンピアラッパーの上に置く。具を広げ、ラッパーの両サイドを折り、底部を折る。ラッパーの上端に溶き卵を塗り、完全に包むまで巻き上げる。同じ手順を繰り返して全ての具を使い切る。
+                        <br>3. 鍋に油を熱し、中火でルンピアを揚げる。
+                        <br>4. 鍋から取り出し、余分な油を切る。提供する。共有して楽しんでください！
+                    </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Lumpia.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/2yp63vne" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="seven-meal-detail" id="seven-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">ロンガニーザ</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">ロンガニーザはスペインのチョリソーに似たソーセージで、ポルトガルのリングイッサにも密接な関連があります。その独特の特徴は、地域ごとに異なる見方がされています。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>挽き豚肉 1 ¾ ポンド
+                        <br>ダークブラウンシュガー 9大さじ
+                        <br>スモークパプリカ 1大さじ
+                        <br>植物油 3大さじ
+                        <br>粗塩 1 ¼ 大さじ
+                        <br>黒胡椒 1ティースプーン
+                        <br>にんにく 2片
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. にんにくの皮をむき、すり鉢でよく潰して、みじん切りにしておく。
+                        <br>2. 大きなボウルで挽き肉と全ての材料を組み合わせてよく混ぜる。
+                        <br>3. ボウルを覆って冷蔵庫で2時間冷やす。
+                        <br>4. ワックスペーパーを平らな表面に敷き、混合物の約3大さじを取って上に置く。ワックスペーパーを上から下に折り、混合物を覆うまで折り込む。指で紙の端を持ち、カードを混合物に向かって滑らせる。ソーセージの形ができるまで少し押す。この手順を繰り返して混合物を使い切る。
+                        <br>5. 一晩冷蔵庫で冷やす。
+                        <br>6. 朝食に調理して提供する。共有して楽しんでください！
+                    </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Longanisa.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/uxpfxkb4" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+        <div class="eight-meal-detail" id="eight-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">チキンバーガー</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">パンの準備をしてください！ジューシーなバーガーのための理想的な詰め物に、チキンの太もも肉と胸肉にコーティングまたはマリネをします。スローやソースを加えたトッピングと選んだサイドディッシュと一緒に堪能してください。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>骨なしチキンブレスト 3枚（約半キロ）
+                        <br>ペッパー 1ティースプーン
+                        <br>塩 1ティースプーン
+                        <br>ウスターシャーソース 2大さじ
+                        <br>マスタードパウダーまたはオールスパイスパウダー 1ティースプーン
+                        <br>小麦粉 2大さじ
+                        <br>卵 1個
+                        <br>パン粉 1 1/2カップ
+                        <br>ソフトシードバーガーバンズ
+                        <br>マヨネーズまたはKFCジンジャーソース
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. チキンブレストが大きすぎる場合は、調理前にスライスします。その後、ウスターシャーソース、ペッパー、塩、マスタードまたはオールスパイスパウダーでチキンブレストをマリネします。少なくとも4時間、または一晩マリネします。
+                        <br>2. 卵と水大さじ2を混ぜてバッターを作り、一旦横に置く。
+                        <br>3. マリネしたチキンブレストをたっぷりの小麦粉で塗りつけ、次に卵とパン粉にしっかりと浸します。
+                        <br>4. コーティングしたチキンブレストを中火から高火で熱した油で揚げ、サクサクで金色になるまで調理します。
+                        <br>5. 完成したバーガーは、レタスをのせ、その上にチキン、その後にマヨネーズまたはKFCジンジャーソースをのせます。バンズは半分に切って軽くトーストします。チーズ好きなら、アメリカンチーズをスライスして加えてください。
+                    </p>
+            
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Burger.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/td757uct" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nine-meal-detail" id="nine-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+        
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">メヌード</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">フィリピンで人気の豚肉料理であるメヌードは、特に祭りなどのイベントでよく提供されます。メヌードの作り方は多様で、ホットドッグのピース、レーズン、ピクルスのビット、さまざまな調味料を加えてこの豚肉とトマトのシチューのうま味を引き出す人もいます。家、町、または州ごとにユニークなバリエーションが存在するかもしれません！
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>料理用油 1/4カップ
+                        <br>じゃがいも 2個、中サイズ、キューブ状に切る
+                        <br>にんじん 1個、中サイズ、キューブ状に切る
+                        <br>にんにく 6片、みじん切り
+                        <br>玉ねぎ 1個、みじん切り
+                        <br>豚肩ロース肉 250グラム、小さなキューブに切る
+                        <br>豚バラ肉 250グラム、小さなキューブに切る
+                        <br>豚レバー 250グラム、小さなキューブに切る
+                        <br>トマトソース 1パック（250g）
+                        <br>豚肉用ブロスキューブ 2個
+                        <br>水 1 1/2カップ
+                        <br>砂糖 1ティースプーン
+                        <br>黒こしょう 適量
+                        <br>レーズン 大さじ2
+                        <br>赤と緑のピーマン 1カップ、キューブ状に切る
+                        <br>オプション：チンゲンサイ 2束、スライス
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. 玉ねぎとにんにくを熱した油で炒め、軽く茶色くなるまで炒める。
+                        <br>2. 次に豚肩ロース肉と豚バラ肉を加え、色が変わるまで炒めた後、レバーを加えて2分間調理する。
+                        <br>3. 豚肉用ブロスキューブを加えてよくかき混ぜ、完全に溶かした後にトマトソース、水、砂糖、黒こしょうを加えてよく混ぜる。
+                        <br>4. じゃがいもとにんじんを鍋に入れ、肉とじゃがいもが調理され、ソースがとろみを帯びるまで低温で続けて調理する。
+                        <br>5. 最後にレーズンとピーマンを加え、さらに2分間調理する。チンゲンサイを加える場合はこの時点で加える。家庭の味のようなポークメヌードは、家族を一つにする料理です。
+                    </p>
+        
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Menudo.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/5f558f59" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+        <div class="ten-meal-detail" id="ten-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+        
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">タプシログ</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">朝が苦手な人でもベッドから飛び起きるくらい魅力的なのは、キッチンから部屋まで届くシナンガグ（ニンニクライス）、目玉焼き、もちろんタパの香ばしい匂いがする時です。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3>
+                    <p><br>ビーフサーロイン 1ポンド、薄切り
+                        <br>卵 3個
+                        <br>料理用油 大さじ6
+                        <br><b>タパのマリネ</b>
+                        <br>ノール液体調味料 大さじ3
+                        <br>にんにく 6片、つぶす
+                        <br>パイナップルジュース 3/4カップ
+                        <br>ブラウンシュガー 大さじ2
+                        <br>白胡椒 1/4ティースプーン
+                        <br><b>シナンガグ</b>
+                        <br>残りご飯 5カップ
+                        <br>塩 小さじ1
+                        <br>にんにく 5片、つぶす
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. タパを準備するため、大きなボウルにビーフを入れ、すべてのタパのマリネ材料を加えてよく混ぜる。ボウルを覆って冷蔵庫に入れ、一晩マリネする。
+                        <br>2. ニンニクライス（シナンガグ）を作るために、フライパンに料理用油大さじ3を熱し、つぶしたにんにくを加える。にんにくが軽く茶色になるまで調理する。残りのご飯を加え、3分間炒める。
+                        <br>3. 塩で味を整え、3〜5分間続けて炒める。横に置く。
+                        <br>4. タパを調理する。フライパンを熱し、マリネしたビーフとマリネ液を入れる。3/4カップの水を加えて混合物を沸騰させる。フライパンを覆い、液体が半分に減るまで続けて調理する。混合物に料理用油大さじ3を加え、液体が完全に蒸発するまで続けて調理する。残った油でビーフタパを中火で焼く。
+                        <br>5. 卵を焼くため、フライパンに料理用油大さじ1を注ぎ、卵を割り入れ、適量の塩を振る。30秒間調理する。フライパンの側に大さじ2の水を注ぎ、フタをして水を沸騰させる。卵黄が完全に蒸し焼きになるまで続けて調理する。
+                        <br>6. ビーフタパ、シナンガグ、目玉焼きを大きな皿に盛り合わせてタプシログを作る。タパにつけるための酢を添えて提供する。
+                    </p>
+        
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Tapsilog.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/5xh9wjtw" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+        <div class="eleven-meal-detail" id="four-meal-detail">
+            <!-- レシピを閉じるボタン -->
+            <button type="button" class="btn recipe-close-btn" id="recipe-close-btn" onclick="closeBtn()">
+                <i class="fas fa-times"></i>
+            </button>
+        
+            <!-- レシピの詳細 -->
+            <div class="meal-content">
+                <h2 class="meal-name">ポテトエッグスキレット</h2>
+                <div class="meal-about">
+                    <h3 class="meal-title-about">料理について</h3>
+                    <p class="meal-descript-about">キュイジーヌにおいて、オムレツは卵を叩いて作られ、フライパンでバターや油で焼かれる料理です。オムレツには、ニラ、野菜、キノコ、肉、チーズ、玉ねぎなどの具材を折りたたんで包むことが一般的です。
+                    </p>
+                </div>
+                <div class="meal-instruct">
+                    <h3>材料：</h3
+                    <p><br>生ベーコン 8枚
+                        <br>ユーコンゴールドポテト 1ポンド、一口大に切る
+                        <br>黄玉ねぎ 1個小、刻む
+                        <br>赤ピーマン 1/2個、刻む
+                        <br>緑ピーマン 1/2個、刻む
+                        <br>にんにく 3片、みじん切り
+                        <br>クミン 1ティースプーン
+                        <br>チリパウダー 1/4ティースプーン
+                        <br>パプリカ 1/4ティースプーン
+                        <br>黒こしょう 1/2ティースプーン
+                        <br>粗塩 1/2ティースプーン
+                        <br>卵 4個
+                        <br>モッツァレラチーズ 1/4カップ、すりおろす
+                        <br>チェダーチーズ 1/4カップ、すりおろす
+                        <br>エキストラバージンオリーブオイル 適量
+                        <br>フレッシュシラントロ 適量、細かく刻む、ニラで飾る
+                    </p>
+                    <h3>作り方：</h3>
+                    <p><br>1. オーブンを400°Fに予熱する。少なくとも10インチのオーブン対応スキレットにベーコンの薄切りを配置し、中低火で両面を調理し、透き通るがまだカリカリではない状態まで約10分間調理する。火から下ろし、ペーパータオルでラインされた皿に移し、ベーコンの脂肪をパンに残す。ベーコンが触れる程度に冷めたら、ざっくりと切る。
+                        <br>2. 中火から強火に熱を上げ、じゃがいも、ピーマン、玉ねぎを加え、7-8分間、頻繁にかき混ぜながら調理し、フォークで突き刺せる程度に柔らかくなるまで調理する。
+                        <br>3. にんにく、クミン、チリパウダー、パプリカ、黒こしょう、塩を加え、にんにくが香り高くなるまで1-2分間調理する。
+                        <br>4. スプーンを使って、ハッシュ混合物に卵を入れるための4〜6の穴（卵の数に応じて）を作る。各穴に均等にチーズを分配し、各穴に1個の卵を割り入れる。
+                        <br>5. 予熱したオーブンに入れ、卵白が固まり、黄身がまだとろりとしているまで8-10分間調理する。
+                        <br>6. 火から下ろし、調理したベーコンを振りかける。フレッシュグラウンドブラックペッパー、シラントロ、ニラで飾る。
+                    </p>
+        
+                </div>
+                <div class="meal-img">
+                    <img src="./img/Potato-Breakfast-Skillet.webp" alt="">
+                </div>
+                <div class="meal-link">
+                    <a href="https://tinyurl.com/yz55k3bv" class="meal-link-btn">動画を見る</a>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Specialities</h3>
+            <ul>
+                <li style="color: black;">多国籍料理のレシピを発見</li>
+                <li style="color: black;">家庭料理の楽しさを再発見</li>
+                <li style="color: black;">フィリピンの味、今すぐ楽しめる</li>
+                <li style="color: black;">簡単おいしい朝食レシピ</li>
+                <li style="color: black;">食卓を彩る国際料理</li>
+            </ul>
+            <h3>Why Choose us?</h3>
+            <ul>
+                <li style="color: black;">家庭で簡単に作れる世界の料理を毎日更新。多彩なレシピで食卓を楽しく</li>
+                <li style="color: black;">フィリピンの伝統料理から始めよう！メヌード、シニガン、そしてもっと多くのレシピを探索</li>
+                <li style="color: black;">手軽に作れる朝食レシピで一日を元気にスタート</li>
+                <li style="color: black;">料理のプロを目指すか、家庭料理のレパートリーを広げたい方必見。毎日更新される美味しいレシピで、あなたも一流シェフに。</li>
+                <li style="color: black;">国際的な味を自宅で再現。世界中の美味しい料理レシピを無料で提供。</li>
+            </ul>
+        </div>
+        
+            
+            
+        </div>
+            <!--Ending of Recipe Details-->
+
+            <!--Footer-->
+    <div class="footer">
+        <div class="social-btn">
+            <a href="https://www.facebook.com/Cmedsss" target="_blank" ><i class="	fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/tiaanmeds/" target="_blank" ><i class="	fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/tianmeds/" target="_blank"><i class="	fab fa-linkedin"></i></a>
+            <a href="https://github.com/TianMeds" target="_blank" "><i class="	fab fa-github"></i></a>
+        </div>
+            <div class="quick-bar">
+                <li><a href="#">ホーム</a></li>
+                    <li><a href="#">私たちについて</a></li>
+                    <li><a href="#">お問い合わせ</a></li>
+            </div>
+        <p>Copyright &copy; 2024 Arash. All right reserved</p>  
+    </div>
+
+    <!--Ending of Footer-->
+
+<!--Script for Javascript-->
+<script src="./assets/index.js"></script>
+<script>
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the page loads, open the modal 
+    window.onload = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>
